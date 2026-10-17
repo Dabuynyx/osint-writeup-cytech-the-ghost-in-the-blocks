@@ -1,73 +1,158 @@
 # The Ghost in the Blocks — Cytech CTF Write-Up
 
-| Challenge | Category | Flag |
-| :--- | :--- | :--- |
-| **The Ghost in the Blocks** | OSINT / Git Forensics | `CTF{cryptix}` |
+<div align="center">
+
+![Category](https://img.shields.io/badge/Category-OSINT%20%2F%20Git%20Forensics-blue?style=for-the-badge&logo=git)
+![Status](https://img.shields.io/badge/Status-Solved-success?style=for-the-badge&logo=checkmarx)
+![CTF](https://img.shields.io/badge/CTF-Cytech-orange?style=for-the-badge)
+![Flag](https://img.shields.io/badge/Flag-CTF%7Bcryptix%7D-red?style=for-the-badge)
+
+</div>
 
 ---
 
-## 📌 Challenge Overview
+## 📋 Challenge Information
 
-Cyber intelligence intercepted chatter regarding a threat actor named **"Herobrine Steve"** who resurfaced in blocky gaming realms. The actor boasted about publishing a script aimed at **"killing villagers"** and attempted to scrub an older, classified project from public sight.
-
-**Objective:** Investigate the digital footprint of "Herobrine Steve", navigate his Git repositories, and recover the hidden artifact / flag.
-
----
-
-## 🔍 Investigation Walkthrough
-
-### 1. OSINT Reconnaissance & Finding the GitHub
-
-Using open-source search operators for the username and recent activity:
-* Search Queries:
-  ```text
-  "Herobrine Steve"
-  "herobrine-steve kill villagers"
-  ```
-* Found Target Profile: [https://github.com/herobrine-steve](https://github.com/herobrine-steve)
-
-Reviewing the profile revealed two public repositories:
-1. `Killing-software` — The villager-killing script mentioned in chatter.
-2. `nether-core-legacy` — The older project targeted for scrubbing.
+| Field | Detail |
+| :--- | :--- |
+| **Challenge Name** | The Ghost in the Blocks |
+| **Category** | OSINT / Git Forensics |
+| **Difficulty** | Easy / Medium |
+| **Flag** | `CTF{cryptix}` |
 
 ---
 
-### 2. Inspecting `Killing-software` Git History
+## 🎯 Challenge Description & Objective
 
-Navigating to the commit logs of the first repository:
-* URL: `https://github.com/herobrine-steve/Killing-software/commits/main/`
+The challenge mentions an elusive actor named **"Herobrine Steve"** who authored a script to **"kill villagers"** in Minecraft and attempted to scrub his older tracks from the web.
 
-Reviewing the commit history revealed that a file named `notes.txt` was added and subsequently deleted. Looking at the commit diff of `notes.txt` revealed developer notes:
+> **Objective:** Track down Herobrine Steve's online presence, audit his Git repositories and commit logs, recover scrubbed configuration artifacts, and retrieve the hidden flag.
 
+---
+
+## 🗺️ Investigation Flow
+
+```mermaid
+flowchart TD
+    A["👤 Herobrine Steve & 'kill villagers'"] -->|Google / GitHub Search| B["🌐 GitHub Profile: herobrine-steve"]
+    B --> C["📦 Repo 1: Killing-software"]
+    B --> D["📦 Repo 2: nether-core-legacy"]
+    C -->|Inspect Commit History| E["📝 Deleted notes.txt found"]
+    E -->|Read Diff: 'Scrub nether-core-legacy'| D
+    D -->|Inspect Commit History| F["🔍 Commit f27fa3d (Scrub commit)"]
+    F -->|View Code Diff| G["⚙️ Deleted SYSTEM_OVERRIDES"]
+    G -->|Extract ARTIFACT_DATA| H["🔐 Base64: Q1RGe2NyeXB0aXh9"]
+    H -->|base64 -d| I["🚩 Flag: CTF{cryptix}"]
+
+    style I fill:#22c55e,stroke:#15803d,stroke-width:2px,color:#fff
+```
+
+---
+
+## 🔍 Step-by-Step Walkthrough & Commands
+
+### 1. OSINT: Finding the GitHub Profile
+
+The challenge hints at **Herobrine Steve** and a script to **"kill villagers"**.
+
+**Search Queries:**
+```text
+"Herobrine Steve"
+"herobrine-steve kill villagers"
+```
+
+**Target Identified:**
+* GitHub Profile: [https://github.com/herobrine-steve](https://github.com/herobrine-steve)
+
+On the profile, two repositories were found:
+1. `Killing-software` — The villager script
+2. `nether-core-legacy` — An old project he was trying to delete
+
+---
+
+### 2. Checking `Killing-software`
+
+Cloning and checking commit history:
+
+```bash
+# Clone the repository locally
+git clone https://github.com/herobrine-steve/Killing-software.git
+cd Killing-software
+
+# View commit history
+git log --oneline
+```
+
+Or directly via GitHub:
+* Commits: [https://github.com/herobrine-steve/Killing-software/commits/main/](https://github.com/herobrine-steve/Killing-software/commits/main/)
+
+Going through the commits revealed an old file `notes.txt`. The file was deleted in a later commit, but remained completely preserved in Git history.
+
+To inspect the deleted file from the terminal:
+```bash
+# Find commits modifying notes.txt
+git log --all --full-history -- "notes.txt"
+
+# View the diff of the commit where notes.txt was modified/deleted
+git show HEAD~1:notes.txt
+```
+
+**Inside `notes.txt`:**
 ```text
 The old 'nether-core-legacy' project has some leftover artifacts in the logs.
 Need to scrub that repository completely before anyone starts digging.
 ```
 
-This confirmed our next target: the `nether-core-legacy` repository.
+> [!NOTE]
+> This note serves as a direct pivot telling us exactly where to look next: `nether-core-legacy`.
 
 ---
 
-### 3. Digging into `nether-core-legacy` Commit History
+### 3. Investigating `nether-core-legacy`
 
-Navigating to the legacy repository:
-* Repository: `https://github.com/herobrine-steve/nether-core-legacy`
-* Commits: `https://github.com/herobrine-steve/nether-core-legacy/commits/main/`
+Navigating to the target repository:
+* Repo: [https://github.com/herobrine-steve/nether-core-legacy](https://github.com/herobrine-steve/nether-core-legacy)
+* Commits: [https://github.com/herobrine-steve/nether-core-legacy/commits/main/](https://github.com/herobrine-steve/nether-core-legacy/commits/main/)
 
-Looking for scrubbed/deleted files or cleanup commits led to commit:
+Cloning and checking history locally:
+```bash
+cd ..
+git clone https://github.com/herobrine-steve/nether-core-legacy.git
+cd nether-core-legacy
+
+# Inspect commit logs with diffs
+git log -p
+```
+
+Looking for anything scrubbed/deleted led directly to commit:
 * **Commit Hash:** `f27fa3dbd43fe5791bb14b2e1e9c01bfcd0ee5e5`
 * **Commit URL:** [https://github.com/herobrine-steve/nether-core-legacy/commit/f27fa3dbd43fe5791bb14b2e1e9c01bfcd0ee5e5](https://github.com/herobrine-steve/nether-core-legacy/commit/f27fa3dbd43fe5791bb14b2e1e9c01bfcd0ee5e5)
 
-Inspecting the diff revealed that a deleted JavaScript config block `SYSTEM_OVERRIDES` contained:
+Viewing the commit diff:
+```bash
+git show f27fa3dbd43fe5791bb14b2e1e9c01bfcd0ee5e5
+```
+
+**Diff Output Snippet:**
+```diff
+- const SYSTEM_OVERRIDES = {
+-   DEBUG_MODE: false,
+-   ARTIFACT_DATA: "Q1RGe2NyeXB0aXh9"
+- };
+```
+
+Found deleted JS config block `SYSTEM_OVERRIDES` containing:
 ```javascript
 ARTIFACT_DATA : "Q1RGe2NyeXB0aXh9"
 ```
 
+This is standard Base64.
+
 ---
 
-### 4. Decoding the Artifact
+### 4. Decoding the Payload
 
-The artifact string `Q1RGe2NyeXB0aXh9` is Base64 encoded.
+Decoding the Base64 string directly in terminal:
 
 ```bash
 echo "Q1RGe2NyeXB0aXh9" | base64 -d
@@ -88,17 +173,8 @@ CTF{cryptix}
 
 ---
 
-## 💡 Summary & Key Takeaways
+## 💡 Key Takeaways & Lessons Learned
 
-1. **Git Forensics Rule:** Deleting a file or code snippet in a subsequent commit does **not** delete it from Git history.
-2. Unless Git history is actively rewritten (e.g., `git filter-repo` or BFG Repo-Cleaner) and force-pushed, all previous versions, commit diffs, and deleted sensitive keys remain permanently accessible.
-3. Attack path:
-   ```text
-   Herobrine Steve
-   └── Killing-software (Commit log)
-       └── Deleted notes.txt (Pivot clue)
-           └── nether-core-legacy (Commit log)
-               └── Scrub commit (f27fa3d...)
-                   └── SYSTEM_OVERRIDES Base64
-                       └── CTF{cryptix}
-   ```
+> [!IMPORTANT]
+> **Deleting stuff from Git $\neq$ actually deleting it.**  
+> Git is an immutable directed acyclic graph (DAG) of commits. When a developer deletes a file or config using `git rm` or simply commits a file removal, the data is **not removed** — only the current tree pointer changes. The old commits, diffs, and trees remain in the history forever unless the commit history is completely rewritten (e.g., using `git filter-repo` or BFG) and force-pushed.
