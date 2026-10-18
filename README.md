@@ -7,7 +7,7 @@
 
 <div align="center">
 
-![Category](https://img.shields.io/badge/Category-OSINT%20%2F%20Git%20Forensics-blue?style=for-the-badge&logo=git)
+![Category](https://img.shields.io/badge/Category-OSINT%20with%20DFIR-blue?style=for-the-badge&logo=git)
 ![Status](https://img.shields.io/badge/Status-Solved-success?style=for-the-badge&logo=checkmarx)
 ![CTF](https://img.shields.io/badge/CTF-Cryptix%20CTF-orange?style=for-the-badge)
 ![Organizer](https://img.shields.io/badge/Organizer-HTU%20Cyber%20Club-blue?style=for-the-badge)
@@ -25,7 +25,7 @@
 | Field | Detail |
 | :--- | :--- |
 | **Challenge Name** | The Ghost in the Blocks |
-| **Category** | OSINT / Git Forensics |
+| **Category** | OSINT with DFIR (Git Forensics) |
 | **Target Identity** | `Herobrine Steve` (`herobrine-steve`) |
 | **Associated Repositories** | `Killing-software`, `nether-core-legacy` |
 | **Final Flag** | `CTF{cryptix}` |
