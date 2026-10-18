@@ -14,6 +14,8 @@
 ![Partner](https://img.shields.io/badge/Partner-CYS--TECH-red?style=for-the-badge)
 ![Flag](https://img.shields.io/badge/Flag-CTF%7Bcryptix%7D-red?style=for-the-badge)
 
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
+
 </div>
 
 ---
@@ -205,3 +207,10 @@ Herobrine Steve
 
 > [!IMPORTANT]
 > **Git Forensics Principle:** Deleting files or altering source code in a modern Version Control System (VCS) like Git does not remove historical records unless the commit graph is actively rewritten (e.g., using `git filter-repo` or BFG Repo-Cleaner) and force-pushed. Even if a developer scrubs credentials in a subsequent commit, previous commits remain accessible.
+
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE) — see the [LICENSE](LICENSE) file for details.
