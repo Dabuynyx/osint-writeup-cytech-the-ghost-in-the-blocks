@@ -1,5 +1,8 @@
 # The Ghost in the Blocks — Cytech CTF Write-Up
 
+> [!NOTE]
+> Part of the [**Cyrptix CTF OSINT Write-Ups Collection**](https://github.com/Dabuynyx/Cyrptix-CTF-OSINT-write-up).
+
 <div align="center">
 
 ![Category](https://img.shields.io/badge/Category-OSINT%20%2F%20Git%20Forensics-blue?style=for-the-badge&logo=git)
